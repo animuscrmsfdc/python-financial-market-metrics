@@ -334,7 +334,7 @@ def fetch_oil_price():
 
 def fetch_buffett_indicator():
     try:
-        w5000 = fetch_yf_last_close(W5000_TICKER, period="5d")
+        w5000 = fetch_yf_last_close(W5000_TICKER, period="1mo")
         r = requests.get(
             "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GDP",
             timeout=10
