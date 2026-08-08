@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 monitor.py)",
+      "Bash(python3 notify_email.py)",
+      "Bash(python3 setup_email.py)",
+      "Bash(bash run_monitor.sh)",
+      "Bash(ls reports/)",
+      "Bash(ls reports/*.txt)",
+      "Bash(cat reports/*.txt)",
+      "Read(reports/**)",
+      "Read(monitor.py)",
+      "Read(notify_email.py)",
+      "Read(CLAUDE.md)"
+    ]
+  },
+  "model": "claude-sonnet-4-6"
+}

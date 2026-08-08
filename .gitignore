@@ -1,0 +1,4 @@
+.email
+reports/
+__pycache__/
+*.pyc
