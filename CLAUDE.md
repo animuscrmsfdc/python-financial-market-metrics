@@ -11,6 +11,13 @@ python3 monitor.py --pc 1.05       # add put/call ratio manually
 ```
 If packages are missing: `pip install -r requirements.txt`
 
+## Starting implementation on an issue
+Requirements live in the GitHub issue — there is no local copy. Before coding, fetch the always-fresh spec:
+```bash
+gh issue view <N> --repo animuscrmsfdc/python-financial-market-metrics
+```
+The feature branch should already exist (created by the `feature-analyst` agent). Open a PR with `Closes #N` in the description to auto-close the issue on merge. The PR template at `.github/pull_request_template.md` pre-fills the Definition of Done checklist.
+
 When the user asks "what's the market doing", "run the monitor", or "check signals":
 1. Run `python3 monitor.py`
 2. Interpret the output against the thresholds below
