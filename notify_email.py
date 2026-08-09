@@ -29,10 +29,22 @@ def load_config():
     return cfg
 
 
-def parse_verdict(text):
-    if "BUY SIGNAL" in text: return "GREEN"
-    if "WATCH"      in text: return "AMBER"
-    return "RED"  # covers VETO and WAIT
+def parse_verdicts(text):
+    """Extract per-market verdicts from the MARKETS summary line."""
+    for line in text.splitlines():
+        if "MARKETS:" in line:
+            verdicts = {}
+            for part in line.split("MARKETS:", 1)[1].strip().split("|"):
+                part = part.strip()
+                if ":" in part:
+                    market, verdict = part.rsplit(":", 1)
+                    verdicts[market.strip()] = verdict.strip()
+            if verdicts:
+                return verdicts
+    # Fallback for reports generated before this change
+    if "BUY SIGNAL" in text: return {"overall": "GREEN"}
+    if "WATCH"      in text: return {"overall": "AMBER"}
+    return {"overall": "RED"}
 
 
 def main():
@@ -52,9 +64,12 @@ def main():
         print(f"No report found at {report_path}. Run monitor.py first.")
         sys.exit(1)
 
-    body    = report_path.read_text().strip()
-    verdict = parse_verdict(body)
-    subject = f"Market Signals {today} {verdict}"
+    body     = report_path.read_text().strip()
+    verdicts = parse_verdicts(body)
+    rank     = {"RED": 2, "AMBER": 1, "GREEN": 0, "N/A": -1}
+    worst    = max(verdicts.values(), key=lambda v: rank.get(v, -1))
+    parts    = " | ".join(f"{m}: {v}" for m, v in verdicts.items())
+    subject  = f"Market Signals {today} | {parts} | Worst: {worst}"
 
     msg            = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
